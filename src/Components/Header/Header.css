@@ -1,0 +1,37 @@
+header {
+    text-align: center;
+}
+
+header > h1 {
+    padding: 0.5em;
+}
+
+header > .nav-wrapper {
+    background-color: lightgray;
+}
+
+header > .nav-wrapper > nav {
+    width: 100%;
+}
+
+header > .nav-wrapper > nav > ul {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+}
+
+header > .nav-wrapper > nav > ul > li > button {
+    padding: 0.2em;
+    border: 0;
+    background-color: transparent;
+    width: 15em;
+    flex-grow: 1;
+    line-height: 2em;
+    border-left: 1px solid slategray;
+    border-right: 1px solid slategray;
+}
+
+header > .nav-wrapper > nav > ul > li > button:hover {
+    background-color: lightslategray;
+}
