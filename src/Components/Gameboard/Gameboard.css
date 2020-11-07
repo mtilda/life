@@ -1,0 +1,10 @@
+#gameboard {
+    width: 500px;
+    height: 500px;
+    margin: 10px auto;
+    display: grid;
+    grid-template-columns: repeat(50,1fr);
+    grid-template-rows: repeat(50,1fr);
+    gap: 1px;
+    background-color: slategray;
+}
