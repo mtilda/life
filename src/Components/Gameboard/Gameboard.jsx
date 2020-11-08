@@ -7,7 +7,7 @@ export default ({ cellMatrix }) =>
         { cellMatrix ?
             cellMatrix.map( (row, rowIndex) =>
                 row.map( (cell, columnIndex) =>
-                    <Cell columnIndex={columnIndex} rowIndex={rowIndex} isAlive={cell} />
+                    <Cell column={columnIndex} row={rowIndex} isAlive={cell} />
             ))
             :
             <></>

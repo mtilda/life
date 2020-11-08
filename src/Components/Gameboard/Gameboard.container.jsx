@@ -7,28 +7,68 @@ export const GameboardContainer = () => {
     );
     
     // set initial state of cellMatrix
-    useEffect( () =>
-        setCellMatrix(Array(50).fill().map((x,i) => Array(50).fill(false)))
+    useEffect( () => {
+        let newCellMatrix = Array(50).fill().map((x,i) => cellMatrix[i]);
+        for ( let i = 0; i < cellMatrix.length ; i++ ) {
+            for ( let j = 0; j < cellMatrix[i].length; j++ ) {
+                newCellMatrix[i][j] = Math.random() < 0.08;
+            }
+        }
+    }
     ,[]);
     
     // update cellMatrix
     useEffect(() => {
         const interval = setInterval( () => {
             let newCellMatrix = Array(50).fill().map((x,i) => cellMatrix[i]);
-            newCellMatrix
-                [Math.floor(Math.random() * 50)]
-                [Math.floor(Math.random() * 50)]
-            = true;
+            for ( let i = 0; i < cellMatrix.length ; i++ ) {
+                for ( let j = 0; j < cellMatrix[i].length; j++ ) {
+                    newCellMatrix[i][j] = willSurvive(i,j);
+                }
+            }
             setCellMatrix(newCellMatrix);
-        }, 1000);
+        }, 100);
         return () => clearInterval(interval);
     }, []);
 
-    const willSurvive = (rowIndex, columnIndex) => {
-        
+    // get the state of a specified cell
+    const getCell = (row,column) => {
+        return cellMatrix[row] && cellMatrix[row][column] || false;
     }
 
-    
+    // will this cell survive this round?
+    const willSurvive = (row, column) => {
+        // count this cell's neightbors
+        let neighborCount = 0;
+        if (getCell(row - 1, column - 1)) neighborCount++;
+        if (getCell(row - 1, column)) neighborCount++;
+        if (getCell(row - 1, column + 1)) neighborCount++;
+        if (getCell(row, column - 1)) neighborCount++;
+        if (getCell(row, column + 1)) neighborCount++;
+        if (getCell(row + 1, column - 1)) neighborCount++;
+        if (getCell(row + 1, column)) neighborCount++;
+        if (getCell(row + 1, column + 1)) neighborCount++;
+        
+        // if this cell is alive
+        if (cellMatrix[row][column]) {
+            // starvation
+            if (neighborCount < 2) {
+                return false;
+            }
+            // stasis
+            else if (neighborCount === 2 || neighborCount === 3) {
+                return true;
+            }
+            // overpopulation
+            else if (neighborCount > 3) {
+                return false;
+            }
+        }
+        // reproduction
+        else if (neighborCount === 3) {
+            return true;
+        }
+    }
 
     return <Gameboard cellMatrix={cellMatrix} />;
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import "./Cell.css";
 
-export default ({ rowIndex, columnIndex, isAlive }) =>
-    <div className="cell" id={`cell-${rowIndex}-${columnIndex}`} style={{
+export default ({ row, column, isAlive }) =>
+    <div className="cell" id={`cell-${row}-${column}`} style={{
         backgroundColor: isAlive ? "lightgray" : "lightslategray"
     }} />
