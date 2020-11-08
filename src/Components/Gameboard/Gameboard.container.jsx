@@ -31,9 +31,19 @@ export const GameboardContainer = () => {
         return () => clearInterval(interval);
     }, []);
 
+    const mod = (n, m) => {
+        return ((n % m) + m) % m;
+    }
+
     // get the state of a specified cell
     const getCell = (row,column) => {
-        return cellMatrix[row] && cellMatrix[row][column] || false;
+        // no wrap
+        // return cellMatrix[row] && cellMatrix[row][column] || false;
+
+        // toroidal
+        let modRow = mod(row, cellMatrix.length);
+        let modColumn = mod(column, cellMatrix[modRow].length);
+        return cellMatrix[modRow][modColumn];
     }
 
     // will this cell survive this round?
