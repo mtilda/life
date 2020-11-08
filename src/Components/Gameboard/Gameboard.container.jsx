@@ -3,33 +3,39 @@ import Gameboard from "./Gameboard";
 
 export const GameboardContainer = () => {
     const [ cellMatrix, setCellMatrix ] = useState(
-        Array(64).fill().map(x => Array(64).fill(false))
+        Array(matrixSize).fill().map(x => Array(64).fill(false))
     );
     
     // set initial state of cellMatrix
     useEffect( () => {
-        let newCellMatrix = Array(64).fill().map((x,i) => cellMatrix[i]);
-        for ( let i = 0; i < cellMatrix.length ; i++ ) {
-            for ( let j = 0; j < cellMatrix[i].length; j++ ) {
-                newCellMatrix[i][j] = Math.random() < 0.08;
+        const newCellMatrix = [];
+        for ( let i = 0; i < 64; i++ ) {
+            newCellMatrix.push([]);
+            for ( let j = 0; j < 64; j++ ) {
+                // newCellMatrix[i][j] = Math.random() * Math.round(Math.pow(i-32,2)+Math.pow(j-32,2)) < 2;
+                newCellMatrix[i][j] = Math.random() < 0.1;
             }
         }
+        setCellMatrix(newCellMatrix);
     }
     ,[]);
     
     // update cellMatrix
     useEffect(() => {
         const interval = setInterval( () => {
-            let newCellMatrix = Array(64).fill().map((x,i) => cellMatrix[i]);
+            const newCellMatrix = [];
+
             for ( let i = 0; i < cellMatrix.length ; i++ ) {
+                newCellMatrix.push([]);
                 for ( let j = 0; j < cellMatrix[i].length; j++ ) {
-                    newCellMatrix[i][j] = willSurvive(i,j);
+                    newCellMatrix[i].push(willSurvive(i,j));
                 }
             }
+
             setCellMatrix(newCellMatrix);
-        }, 100);
+        }, 0);
         return () => clearInterval(interval);
-    }, []);
+    });
 
     const mod = (n, m) => {
         return ((n % m) + m) % m;
@@ -50,14 +56,14 @@ export const GameboardContainer = () => {
     const willSurvive = (row, column) => {
         // count this cell's neightbors
         let neighborCount = 0;
-        if (getCell(row - 1, column - 1)) neighborCount++;
-        if (getCell(row - 1, column)) neighborCount++;
-        if (getCell(row - 1, column + 1)) neighborCount++;
-        if (getCell(row, column - 1)) neighborCount++;
-        if (getCell(row, column + 1)) neighborCount++;
-        if (getCell(row + 1, column - 1)) neighborCount++;
-        if (getCell(row + 1, column)) neighborCount++;
-        if (getCell(row + 1, column + 1)) neighborCount++;
+        if (getCell(row - 1, column - 1))   neighborCount++;
+        if (getCell(row - 1, column))       neighborCount++;
+        if (getCell(row - 1, column + 1))   neighborCount++;
+        if (getCell(row, column - 1))       neighborCount++;
+        if (getCell(row, column + 1))       neighborCount++;
+        if (getCell(row + 1, column - 1))   neighborCount++;
+        if (getCell(row + 1, column))       neighborCount++;
+        if (getCell(row + 1, column + 1))   neighborCount++;
         
         // if this cell is alive
         if (cellMatrix[row][column]) {
@@ -78,6 +84,7 @@ export const GameboardContainer = () => {
         else if (neighborCount === 3) {
             return true;
         }
+        else return false;
     }
 
     return <Gameboard cellMatrix={cellMatrix} />;
