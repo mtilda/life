@@ -6,7 +6,7 @@ export default () => {
   return (
     <div className="App">
       <Header />
-      <Gameboard />
+      <Gameboard matrixSize={128} />
     </div>
   );
 }

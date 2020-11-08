@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Gameboard from "./Gameboard";
 
-export const GameboardContainer = () => {
+export const GameboardContainer = ({ matrixSize }) => {
     const [ cellMatrix, setCellMatrix ] = useState(
-        Array(matrixSize).fill().map(x => Array(64).fill(false))
+        Array(matrixSize).fill().map(x => Array(matrixSize).fill(false))
     );
     
     // set initial state of cellMatrix
     useEffect( () => {
         const newCellMatrix = [];
-        for ( let i = 0; i < 64; i++ ) {
+        for ( let i = 0; i < matrixSize; i++ ) {
             newCellMatrix.push([]);
-            for ( let j = 0; j < 64; j++ ) {
+            for ( let j = 0; j < matrixSize; j++ ) {
                 // newCellMatrix[i][j] = Math.random() * Math.round(Math.pow(i-32,2)+Math.pow(j-32,2)) < 2;
                 newCellMatrix[i][j] = Math.random() < 0.1;
             }
@@ -87,5 +87,5 @@ export const GameboardContainer = () => {
         else return false;
     }
 
-    return <Gameboard cellMatrix={cellMatrix} />;
+    return <Gameboard cellMatrix={cellMatrix} matrixSize={matrixSize}/>;
 }
