@@ -3,12 +3,12 @@ import Gameboard from "./Gameboard";
 
 export const GameboardContainer = () => {
     const [ cellMatrix, setCellMatrix ] = useState(
-        Array(50).fill().map(x => Array(50).fill(false))
+        Array(64).fill().map(x => Array(64).fill(false))
     );
     
     // set initial state of cellMatrix
     useEffect( () => {
-        let newCellMatrix = Array(50).fill().map((x,i) => cellMatrix[i]);
+        let newCellMatrix = Array(64).fill().map((x,i) => cellMatrix[i]);
         for ( let i = 0; i < cellMatrix.length ; i++ ) {
             for ( let j = 0; j < cellMatrix[i].length; j++ ) {
                 newCellMatrix[i][j] = Math.random() < 0.08;
@@ -20,7 +20,7 @@ export const GameboardContainer = () => {
     // update cellMatrix
     useEffect(() => {
         const interval = setInterval( () => {
-            let newCellMatrix = Array(50).fill().map((x,i) => cellMatrix[i]);
+            let newCellMatrix = Array(64).fill().map((x,i) => cellMatrix[i]);
             for ( let i = 0; i < cellMatrix.length ; i++ ) {
                 for ( let j = 0; j < cellMatrix[i].length; j++ ) {
                     newCellMatrix[i][j] = willSurvive(i,j);
