@@ -1,6 +1,9 @@
 #gameboard {
-    width: 500px;
-    height: 500px;
+    width: 100vw;
+    max-width: 1000px;
+    height: 100vw;
+    max-height: 1000px;
+    padding: 20px;
     margin: 10px auto;
     display: grid;
     gap: 1px;

@@ -1,41 +1,53 @@
 import React, { useState, useEffect } from "react";
 import Gameboard from "./Gameboard";
 
-export const GameboardContainer = ({ matrixSize }) => {
+export const GameboardContainer = ({ matrixSize, play, reset, dismissReset }) => {
     const [ cellMatrix, setCellMatrix ] = useState(
         Array(matrixSize).fill().map(x => Array(matrixSize).fill(false))
     );
     
-    // set initial state of cellMatrix
+    // handle reset
     useEffect( () => {
-        const newCellMatrix = [];
-        for ( let i = 0; i < matrixSize; i++ ) {
-            newCellMatrix.push([]);
-            for ( let j = 0; j < matrixSize; j++ ) {
-                // newCellMatrix[i][j] = Math.random() * Math.round(Math.pow(i-32,2)+Math.pow(j-32,2)) < 2;
-                newCellMatrix[i][j] = Math.random() < 0.1;
-            }
+        if (reset) {
+            seedMatrix();
+            dismissReset();
         }
-        setCellMatrix(newCellMatrix);
     }
-    ,[]);
+    ,[reset]);
     
     // update cellMatrix
     useEffect(() => {
         const interval = setInterval( () => {
-            const newCellMatrix = [];
+            if (play) {
+                const newCellMatrix = [];
 
-            for ( let i = 0; i < cellMatrix.length ; i++ ) {
-                newCellMatrix.push([]);
-                for ( let j = 0; j < cellMatrix[i].length; j++ ) {
-                    newCellMatrix[i].push(willSurvive(i,j));
+                for ( let i = 0; i < cellMatrix.length ; i++ ) {
+                    newCellMatrix.push([]);
+                    for ( let j = 0; j < cellMatrix[i].length; j++ ) {
+                        newCellMatrix[i].push(willSurvive(i,j));
+                    }
                 }
-            }
 
-            setCellMatrix(newCellMatrix);
-        }, 0);
+                setCellMatrix(newCellMatrix);
+            }
+        }, 50);
         return () => clearInterval(interval);
     });
+    
+    // set initial state of cellMatrix
+    const seedMatrix = () => {
+        const newCellMatrix = [];
+        for ( let i = 0; i < matrixSize; i++ ) {
+            newCellMatrix.push([]);
+            for ( let j = 0; j < matrixSize; j++ ) {
+                newCellMatrix[i][j] = Math.random() < 0.1;
+                // newCellMatrix[i][j] = Math.pow(Math.random(),2) * Math.round(Math.pow(i-matrixSize/2,2)+Math.pow(j-matrixSize/2,2)) < 5;
+                // newCellMatrix[i][j] = Math.round(Math.sqrt(Math.pow(i-matrixSize/2,2)+Math.pow(j-matrixSize/2,2))) % 5 === 0;
+                // newCellMatrix[i][j] = i*j%6 === 0;
+            }
+        }
+        setCellMatrix(newCellMatrix);
+    }
 
     const mod = (n, m) => {
         return ((n % m) + m) % m;
