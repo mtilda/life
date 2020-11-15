@@ -4,6 +4,7 @@ import { GameboardContainer as Gameboard } from "./Components/Gameboard/Gameboar
 import "./App.css";
 
 export default () => {
+  const [tick, setTick] = useState(0);
   const [play, setPlay] = useState(true);
   const [reset, setReset] = useState(true);
 
@@ -26,7 +27,8 @@ export default () => {
   return (
     <div className="App">
       <Header play={play} handlePlay={handlePlay} handlePause={handlePause} handleReset={handleReset} />
-      <Gameboard matrixSize={128} play={play} reset={reset} dismissReset={dismissReset} />
+      <h3>{tick}</h3>
+      <Gameboard matrixSize={128} play={play} reset={reset} dismissReset={dismissReset} tick={tick} setTick={setTick} />
     </div>
   );
 }

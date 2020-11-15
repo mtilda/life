@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Gameboard from "./Gameboard";
 
-export const GameboardContainer = ({ matrixSize, play, reset, dismissReset }) => {
+export const GameboardContainer = ({ matrixSize, play, reset, dismissReset, tick, setTick }) => {
     const [ cellMatrix, setCellMatrix ] = useState(
         Array(matrixSize).fill().map(x => Array(matrixSize).fill(false))
     );
@@ -28,6 +28,7 @@ export const GameboardContainer = ({ matrixSize, play, reset, dismissReset }) =>
                     }
                 }
 
+                setTick(tick + 1);
                 setCellMatrix(newCellMatrix);
             }
         }, 50);
@@ -46,6 +47,7 @@ export const GameboardContainer = ({ matrixSize, play, reset, dismissReset }) =>
                 // newCellMatrix[i][j] = i*j%6 === 0;
             }
         }
+        setTick(0);
         setCellMatrix(newCellMatrix);
     }
 
