@@ -79,23 +79,15 @@ export const GameboardContainer = ({ matrixSize, play, reset, dismissReset, tick
     if (getCell(row + 1, column)) neighborCount++;
     if (getCell(row + 1, column + 1)) neighborCount++;
 
-    // if this cell is alive
-    if (cellMatrix[row][column] || Math.random() < 0.005) {
-      // starvation
-      if (neighborCount < 2) {
+    if (cellMatrix[row][column]) { // if this cell is alive
+      if (neighborCount < 2) { // starvation
         return false;
-      }
-      // stasis
-      else if (neighborCount === 2 || neighborCount === 3) {
+      } else if (neighborCount === 2 || neighborCount === 3) { // stasis
         return true;
-      }
-      // overpopulation
-      else if (neighborCount > 3) {
+      } else if (neighborCount > 3) { // overpopulation
         return false;
       }
-    }
-    // reproduction
-    else if (neighborCount === 3) {
+    } else if (neighborCount === 3) { // reproduction
       return true;
     } else return false;
   };
