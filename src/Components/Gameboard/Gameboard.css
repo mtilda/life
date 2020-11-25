@@ -1,8 +1,8 @@
 #gameboard {
     width: 100vw;
-    max-width: 1000px;
+    max-width: calc(100vh - 150px);
     height: 100vw;
-    max-height: 1000px;
+    max-height: calc(100vh - 150px);
     padding: 20px;
     margin: 10px auto;
     display: grid;
