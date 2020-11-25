@@ -25,7 +25,7 @@ export default () => {
   };
 
   return (
-    <div className='App'>
+    <div className='app'>
       <Header play={play} handlePlay={handlePlay} handlePause={handlePause} handleReset={handleReset} />
       <h3>{tick}</h3>
       <Gameboard matrixSize={128} play={play} reset={reset} dismissReset={dismissReset} tick={tick} setTick={setTick} />
