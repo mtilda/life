@@ -1,5 +1,7 @@
 header {
+    position: relative;
     text-align: center;
+    width: 100%;
 }
 
 header > h1 {
@@ -7,29 +9,42 @@ header > h1 {
 }
 
 header > .nav-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
     background-color: lightgray;
 }
 
 header > .nav-wrapper > nav {
     width: 100%;
+    max-width: 600px;
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: slategray;
 }
 
 header > .nav-wrapper > nav > ul {
+    width: 100%;
     margin: 0 auto;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     list-style-type: none;
+    gap: 4px;
+}
+
+header > .nav-wrapper > nav > ul > li {
+    flex-grow: 1;
+    min-width: 100px;
+    
 }
 
 header > .nav-wrapper > nav > ul > li > button {
-    padding: 0.2em;
-    border: 0;
-    background-color: transparent;
-    width: 15em;
-    flex-grow: 1;
+    width: 100%;
+    margin: 0;
     line-height: 2em;
-    border-left: 1px solid slategray;
-    border-right: 1px solid slategray;
+    border: 0;
+    background-color: lightgray;
 }
 
 header > .nav-wrapper > nav > ul > li > button:hover {
