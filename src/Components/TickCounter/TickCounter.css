@@ -1,0 +1,13 @@
+.tick-counter-wrapper {
+    width: 100%;
+    text-align: center;
+}
+
+.tick-counter {
+    width: fit-content;
+    padding: 0 20px;
+    margin: 4px auto;
+    font-weight: bold;
+    color: black;
+    background-color: lightgrey;
+}

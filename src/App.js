@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Header from './Components/Header/Header';
+import TickCounter from './Components/TickCounter/TickCounter';
 import { GameboardContainer as Gameboard } from './Components/Gameboard/Gameboard.container';
 import './App.css';
 
@@ -27,7 +28,7 @@ export default () => {
   return (
     <div className='app'>
       <Header play={play} handlePlay={handlePlay} handlePause={handlePause} handleReset={handleReset} />
-      <h3>{tick}</h3>
+      <TickCounter tick={tick} />
       <Gameboard matrixSize={128} play={play} reset={reset} dismissReset={dismissReset} tick={tick} setTick={setTick} />
     </div>
   );
