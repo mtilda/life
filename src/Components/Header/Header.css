@@ -42,6 +42,8 @@ header > .nav-wrapper > nav > ul > li {
 header > .nav-wrapper > nav > ul > li > button {
     width: 100%;
     margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
     line-height: 2em;
     border: 0;
     background-color: lightgray;
