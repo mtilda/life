@@ -13,7 +13,7 @@ export const GameboardContainer = ({ matrixSize, play, reset, dismissReset, tick
       dismissReset();
     }
   }
-  , [reset]);
+  , [reset, matrixSize]);
 
   // update cellMatrix
   useEffect(() => {
@@ -31,7 +31,7 @@ export const GameboardContainer = ({ matrixSize, play, reset, dismissReset, tick
         setTick(tick + 1);
         setCellMatrix(newCellMatrix);
       }
-    }, 300);
+    }, 0);
     return () => clearInterval(interval);
   });
 
@@ -42,9 +42,9 @@ export const GameboardContainer = ({ matrixSize, play, reset, dismissReset, tick
       newCellMatrix.push([]);
       for (let j = 0; j < matrixSize; j++) {
         newCellMatrix[i][j] = Math.random() < 0.1;
-        // newCellMatrix[i][j] = Math.pow(Math.random(),2) * Math.round(Math.pow(i-matrixSize/2,2)+Math.pow(j-matrixSize/2,2)) < 5;
-        // newCellMatrix[i][j] = Math.round(Math.sqrt(Math.pow(i-matrixSize/2,2)+Math.pow(j-matrixSize/2,2))) % 5 === 0;
-        // newCellMatrix[i][j] = i*j%6 === 0;
+        // newCellMatrix[i][j] = Math.pow(Math.random(), 2) * Math.round(Math.pow(i - matrixSize / 2, 2) + Math.pow(j - matrixSize / 2, 2)) < 5;
+        // newCellMatrix[i][j] = Math.round(Math.sqrt(Math.pow(i - matrixSize / 2, 2) + Math.pow(j - matrixSize / 2, 2))) % 5 === 0;
+        // newCellMatrix[i][j] = i * j % 7 === 0;
       }
     }
     setTick(0);
@@ -69,15 +69,17 @@ export const GameboardContainer = ({ matrixSize, play, reset, dismissReset, tick
   // will this cell survive this round?
   const willSurvive = (row, column) => {
     // count this cell's neightbors
+    // [
+    //   [1, 1, 1],
+    //   [1, 1, 1],
+    //   [1, 1, 1]
+    // ];
     let neighborCount = 0;
-    if (getCell(row - 1, column - 1)) neighborCount++;
-    if (getCell(row - 1, column)) neighborCount++;
-    if (getCell(row - 1, column + 1)) neighborCount++;
-    if (getCell(row, column - 1)) neighborCount++;
-    if (getCell(row, column + 1)) neighborCount++;
-    if (getCell(row + 1, column - 1)) neighborCount++;
-    if (getCell(row + 1, column)) neighborCount++;
-    if (getCell(row + 1, column + 1)) neighborCount++;
+    let i = 0;
+    while (i <= 8) {
+      if (getCell(row - 1 + Math.floor(i / 3), column - 1 + i % 3)) neighborCount++;
+      i += i === 3 ? 2 : 1; // skip self
+    }
 
     if (cellMatrix[row][column]) { // if this cell is alive
       if (neighborCount < 2) { // starvation

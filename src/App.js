@@ -29,7 +29,7 @@ export default () => {
     <div className='app'>
       <Header play={play} handlePlay={handlePlay} handlePause={handlePause} handleReset={handleReset} />
       <TickCounter tick={tick} />
-      <Gameboard matrixSize={128} play={play} reset={reset} dismissReset={dismissReset} tick={tick} setTick={setTick} />
+      <Gameboard matrixSize={64} play={play} reset={reset} dismissReset={dismissReset} tick={tick} setTick={setTick} />
     </div>
   );
 };
