@@ -1,10 +1,14 @@
-import { Link, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
 import GamePage from './Pages/GamePage';
-import './App.css';
+import styled from 'styled-components';
+
+const App = styled.div`
+  min-height: 100%;
+`;
 
 export default () =>
-  <div>
+  <App>
     {/* <ul>
       <li>
         <Link to='/'>Home</Link>
@@ -23,4 +27,4 @@ export default () =>
       </Route>
       <Redirect path='*' to='/' />
     </Switch>
-  </div>;
+  </App>;
