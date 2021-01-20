@@ -28,7 +28,17 @@ export default () => {
     <>
       <Header play={play} handlePlay={handlePlay} handlePause={handlePause} handleReset={handleReset} />
       <TickCounter tick={tick} />
-      <Gameboard matrixSize={64} play={play} reset={reset} dismissReset={dismissReset} tick={tick} setTick={setTick} />
+      <Gameboard
+        width='800px'
+        height='400px'
+        matrixWidth={512}
+        matrixHeight={256}
+        play={play}
+        reset={reset}
+        dismissReset={dismissReset}
+        tick={tick}
+        setTick={setTick}
+      />
     </>
   );
 };

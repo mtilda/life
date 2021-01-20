@@ -1,24 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import Cell from '../Cell/Cell';
 
-const GameBoard = styled.div`{
-  width: 100vw;
-  max-width: calc(100vh - 150px);
-  height: 100vw;
-  max-height: calc(100vh - 150px);
-  padding: 20px;
-  margin: 10px auto;
-  display: grid;
-  grid-template-rows: repeat(${({ matrixSize }) => matrixSize},1fr);
-  grid-template-columns: repeat(${({ matrixSize }) => matrixSize},1fr);
-  gap: 1px;
-  background-color: slategray;
-}`;
-
-export default ({ matrixSize, play, reset, dismissReset, tick, setTick }) => {
+export default ({ width, height, matrixWidth, matrixHeight, play, reset, dismissReset, tick, setTick }) => {
   const [cellMatrix, setCellMatrix] = useState(
-    Array(matrixSize).fill().map(x => Array(matrixSize).fill(false))
+    Array(matrixHeight).fill().map(x => Array(matrixWidth).fill(false))
   );
 
   // handle reset
@@ -27,8 +12,7 @@ export default ({ matrixSize, play, reset, dismissReset, tick, setTick }) => {
       seedMatrix();
       dismissReset();
     }
-  }
-  , [reset, matrixSize]);
+  }, [reset, matrixWidth, matrixHeight]);
 
   // update cellMatrix
   useEffect(() => {
@@ -53,9 +37,9 @@ export default ({ matrixSize, play, reset, dismissReset, tick, setTick }) => {
   // set initial state of cellMatrix
   const seedMatrix = () => {
     const newCellMatrix = [];
-    for (let i = 0; i < matrixSize; i++) {
+    for (let i = 0; i < matrixHeight; i++) {
       newCellMatrix.push([]);
-      for (let j = 0; j < matrixSize; j++) {
+      for (let j = 0; j < matrixWidth; j++) {
         newCellMatrix[i][j] = Math.random() < 0.1;
         // newCellMatrix[i][j] = Math.pow(Math.random(), 2) * Math.round(Math.pow(i - matrixSize / 2, 2) + Math.pow(j - matrixSize / 2, 2)) < 5;
         // newCellMatrix[i][j] = Math.round(Math.sqrt(Math.pow(i - matrixSize / 2, 2) + Math.pow(j - matrixSize / 2, 2))) % 5 === 0;
@@ -109,14 +93,57 @@ export default ({ matrixSize, play, reset, dismissReset, tick, setTick }) => {
     } else return false;
   };
 
+  const canvasRef = useRef(null);
+
+  // refresh canvas
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    draw(
+      context,
+      canvasRef.current && 4 * canvasRef.current.clientWidth,
+      canvasRef.current && 4 * canvasRef.current.clientHeight,
+      matrixWidth,
+      matrixHeight
+    );
+  }, [cellMatrix, matrixWidth, matrixHeight]);
+
+  // draw the cell matrix on the canvas
+  const draw = (context, canvasWidth, canvasHeight, matrixWidth, matrixHeight) => {
+    const scale = {
+      x: canvasWidth / matrixWidth,
+      y: canvasHeight / matrixHeight
+    };
+    // clear the canvas
+    context.clearRect(0, 0, canvasWidth, canvasHeight);
+    // draw each cell
+    cellMatrix.forEach((row, rowIndex) => {
+      row.forEach((cell, columnIndex) => {
+        cell && context.fillRect(columnIndex * scale.x, rowIndex * scale.y, scale.x, scale.y);
+      });
+    });
+  };
+
   return (
-    <GameBoard matrixSize={matrixSize}>
-      {cellMatrix
-        ? cellMatrix.map((row, rowIndex) =>
-            row.map((cell, columnIndex) =>
-              <Cell key={rowIndex * row.length + columnIndex} column={columnIndex} row={rowIndex} isAlive={cell} />
-            ))
-        : <></>}
-    </GameBoard>
+    <Container width={width} height={height}>
+      <Canvas
+        width={canvasRef.current && 4 * canvasRef.current.clientWidth}
+        height={canvasRef.current && 4 * canvasRef.current.clientHeight}
+        ref={canvasRef}
+      />
+    </Container>
   );
 };
+
+const Container = styled.div`{
+  width: ${({ width }) => width || '100%'};
+  height: ${({ height }) => height || '100%'};
+  padding: 20px;
+  margin: auto auto;
+  background-color: slategray;
+}`;
+
+const Canvas = styled.canvas`{
+  width: 100%;
+  height: 100%;
+}`;
