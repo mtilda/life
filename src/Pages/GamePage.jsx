@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Header from '../Components/Header/Header';
 import TickCounter from '../Components/TickCounter/TickCounter';
-import { GameboardContainer as Gameboard } from '../Components/Gameboard/Gameboard.container';
+import Gameboard from '../Components/Gameboard/Gameboard';
 
 export default () => {
   const [tick, setTick] = useState(0);
