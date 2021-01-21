@@ -156,12 +156,15 @@ const Container = styled.div`{
 }`;
 
 const Canvas = styled.canvas`{
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
 }`;
 
 const ChildrenContainer = styled.div`
-  position: abolute;
+  position: absolute;
   left: 0;
   top: 0;
   width: 100%;

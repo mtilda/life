@@ -26,8 +26,6 @@ export default () => {
 
   return (
     <>
-      <Header play={play} handlePlay={handlePlay} handlePause={handlePause} handleReset={handleReset} />
-      <TickCounter tick={tick} />
       <Gameboard
         width='1600px'
         height='800px'
@@ -38,7 +36,10 @@ export default () => {
         dismissReset={dismissReset}
         tick={tick}
         setTick={setTick}
-      />
+      >
+        <Header play={play} handlePlay={handlePlay} handlePause={handlePause} handleReset={handleReset} />
+        <TickCounter tick={tick} />
+      </Gameboard>
     </>
   );
 };
