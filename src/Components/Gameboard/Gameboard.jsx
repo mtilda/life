@@ -1,7 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-export default ({ width, height, matrixWidth, matrixHeight, play, reset, dismissReset, tick, setTick }) => {
+export default ({
+  width,
+  height,
+  matrixWidth,
+  matrixHeight,
+  play,
+  reset,
+  dismissReset,
+  tick,
+  setTick,
+  children
+}) => {
   const [cellMatrix, setCellMatrix] = useState(
     Array(matrixHeight).fill().map(x => Array(matrixWidth).fill(false))
   );
@@ -115,7 +126,6 @@ export default ({ width, height, matrixWidth, matrixHeight, play, reset, dismiss
       y: canvasHeight / matrixHeight
     };
     // clear the canvas
-    context.fillStyle = 'rgba(112,128,144,0.3)';
     context.clearRect(0, 0, canvasWidth, canvasHeight);
     // draw each cell
     context.fillStyle = 'rgba(211,211,211,1)';
@@ -133,18 +143,27 @@ export default ({ width, height, matrixWidth, matrixHeight, play, reset, dismiss
         height={canvasRef.current && 4 * canvasRef.current.clientHeight}
         ref={canvasRef}
       />
+      <ChildrenContainer>{children}</ChildrenContainer>
     </Container>
   );
 };
 
 const Container = styled.div`{
+  position: relative;
   width: ${({ width }) => width || '100%'};
   height: ${({ height }) => height || '100%'};
   margin: auto auto;
-  background-color: slategray;
 }`;
 
 const Canvas = styled.canvas`{
   width: 100%;
   height: 100%;
 }`;
+
+const ChildrenContainer = styled.div`
+  position: abolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+`;
