@@ -40,9 +40,9 @@ export default ({ width, height, matrixWidth, matrixHeight, play, reset, dismiss
     for (let i = 0; i < matrixHeight; i++) {
       newCellMatrix.push([]);
       for (let j = 0; j < matrixWidth; j++) {
-        newCellMatrix[i][j] = Math.random() < 0.1;
-        // newCellMatrix[i][j] = Math.pow(Math.random(), 2) * Math.round(Math.pow(i - matrixSize / 2, 2) + Math.pow(j - matrixSize / 2, 2)) < 5;
-        // newCellMatrix[i][j] = Math.round(Math.sqrt(Math.pow(i - matrixSize / 2, 2) + Math.pow(j - matrixSize / 2, 2))) % 5 === 0;
+        // newCellMatrix[i][j] = Math.random() < 0.1;
+        newCellMatrix[i][j] = Math.pow(Math.random(), 2) * Math.round(Math.pow(i - matrixHeight / 2, 2) + Math.pow(j - matrixWidth / 2, 2)) < 5;
+        // newCellMatrix[i][j] = Math.round(Math.sqrt(Math.pow(i - matrixHeight / 2, 2) + Math.pow(j - matrixWidth / 2, 2))) % 5 === 0;
         // newCellMatrix[i][j] = i * j % 7 === 0;
       }
     }
@@ -80,7 +80,7 @@ export default ({ width, height, matrixWidth, matrixHeight, play, reset, dismiss
       i += i === 3 ? 2 : 1; // skip self
     }
 
-    if (cellMatrix[row][column] || Math.random() < 0.001) { // if this cell is alive
+    if (cellMatrix[row][column] || Math.random() < 0.0001) { // if this cell is alive
       if (neighborCount < 2) { // starvation
         return false;
       } else if (neighborCount === 2 || neighborCount === 3) { // stasis
@@ -115,8 +115,10 @@ export default ({ width, height, matrixWidth, matrixHeight, play, reset, dismiss
       y: canvasHeight / matrixHeight
     };
     // clear the canvas
+    context.fillStyle = 'rgba(112,128,144,0.3)';
     context.clearRect(0, 0, canvasWidth, canvasHeight);
     // draw each cell
+    context.fillStyle = 'rgba(211,211,211,1)';
     cellMatrix.forEach((row, rowIndex) => {
       row.forEach((cell, columnIndex) => {
         cell && context.fillRect(columnIndex * scale.x, rowIndex * scale.y, scale.x, scale.y);
@@ -138,7 +140,6 @@ export default ({ width, height, matrixWidth, matrixHeight, play, reset, dismiss
 const Container = styled.div`{
   width: ${({ width }) => width || '100%'};
   height: ${({ height }) => height || '100%'};
-  padding: 20px;
   margin: auto auto;
   background-color: slategray;
 }`;
