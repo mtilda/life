@@ -2,16 +2,18 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 export default ({
+  children,
   width,
   height,
   matrixWidth,
   matrixHeight,
-  play,
-  reset,
-  dismissReset,
-  tick,
-  setTick,
-  children
+  mutationRate = 0,
+  trail = 0,
+  play = true,
+  reset = false,
+  dismissReset = () => {},
+  tick = 0,
+  setTick = () => {}
 }) => {
   const [cellMatrix, setCellMatrix] = useState(
     Array(matrixHeight).fill().map(x => Array(matrixWidth).fill(false))
@@ -51,8 +53,8 @@ export default ({
     for (let i = 0; i < matrixHeight; i++) {
       newCellMatrix.push([]);
       for (let j = 0; j < matrixWidth; j++) {
-        // newCellMatrix[i][j] = Math.random() < 0.1;
-        newCellMatrix[i][j] = Math.pow(Math.random(), 2) * Math.round(Math.pow(i - matrixHeight / 2, 2) + Math.pow(j - matrixWidth / 2, 2)) < 5;
+        newCellMatrix[i][j] = Math.random() < 0.1;
+        // newCellMatrix[i][j] = Math.pow(Math.random(), 2) * Math.round(Math.pow(i - matrixHeight / 2, 2) + Math.pow(j - matrixWidth / 2, 2)) < 5;
         // newCellMatrix[i][j] = Math.round(Math.sqrt(Math.pow(i - matrixHeight / 2, 2) + Math.pow(j - matrixWidth / 2, 2))) % 5 === 0;
         // newCellMatrix[i][j] = i * j % 7 === 0;
       }
@@ -91,7 +93,7 @@ export default ({
       i += i === 3 ? 2 : 1; // skip self
     }
 
-    if (cellMatrix[row][column] || Math.random() < 0.0001) { // if this cell is alive
+    if (cellMatrix[row][column] || Math.random() < mutationRate) { // if this cell is alive
       if (neighborCount < 2) { // starvation
         return false;
       } else if (neighborCount === 2 || neighborCount === 3) { // stasis
@@ -126,8 +128,15 @@ export default ({
       y: canvasHeight / matrixHeight
     };
     // clear the canvas
-    context.clearRect(0, 0, canvasWidth, canvasHeight);
+    if (trail) {
+      context.globalCompositeOperation = 'destination-in';
+      context.fillStyle = `rgba(256,256,256,${trail})`;
+      context.fillRect(0, 0, canvasWidth, canvasHeight);
+    } else {
+      context.clearRect(0, 0, canvasWidth, canvasHeight);
+    }
     // draw each cell
+    context.globalCompositeOperation = 'source-over';
     context.fillStyle = 'rgba(211,211,211,1)';
     cellMatrix.forEach((row, rowIndex) => {
       row.forEach((cell, columnIndex) => {
@@ -150,8 +159,8 @@ export default ({
 
 const Container = styled.div`{
   position: relative;
-  width: ${({ width }) => width || '100%'};
-  height: ${({ height }) => height || '100%'};
+  width: ${({ width }) => width + 'px' || '100%'};
+  height: ${({ height }) => height + 'px' || '100%'};
   margin: auto auto;
 }`;
 

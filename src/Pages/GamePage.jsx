@@ -27,10 +27,12 @@ export default () => {
   return (
     <>
       <Gameboard
-        width='1600px'
-        height='800px'
-        matrixWidth={200}
-        matrixHeight={100}
+        width={1600}
+        height={800}
+        matrixWidth={1024}
+        matrixHeight={512}
+        mutationRate={0.00001}
+        trail={0.2}
         play={play}
         reset={reset}
         dismissReset={dismissReset}
