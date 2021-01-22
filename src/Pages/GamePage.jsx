@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import useWindowDimensions from '../Hooks/useWindowDimensions';
 import Header from '../Components/Header/Header';
 import TickCounter from '../Components/TickCounter/TickCounter';
 import Gameboard from '../Components/Gameboard/Gameboard';
@@ -24,15 +25,17 @@ export default () => {
     setReset(false);
   };
 
+  const windowDimensions = useWindowDimensions();
+
   return (
     <>
       <Gameboard
-        width={1600}
-        height={800}
-        matrixWidth={1024}
-        matrixHeight={512}
+        width={windowDimensions.width}
+        height={windowDimensions.height}
+        matrixWidth={Math.floor(windowDimensions.width / 10)}
+        matrixHeight={Math.floor(windowDimensions.height / 10)}
         mutationRate={0.00001}
-        trail={0.2}
+        trail={0.5}
         play={play}
         reset={reset}
         dismissReset={dismissReset}

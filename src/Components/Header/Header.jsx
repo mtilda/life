@@ -3,7 +3,6 @@ import './Header.css';
 
 export default ({ play, handlePlay, handlePause, handleReset }) =>
   <header>
-    <h1>Conway's Game of Life</h1>
     <div className='nav-wrapper'>
       <nav>
         <ul>
