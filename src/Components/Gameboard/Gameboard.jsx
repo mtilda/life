@@ -3,10 +3,13 @@ import styled from 'styled-components';
 
 export default ({
   children,
-  width,
-  height,
+  width = null,
+  height = null,
   matrixWidth,
   matrixHeight,
+  originOffsetY = 30,
+  originOffsetX = 30,
+  scale = 1,
   mutationRate = 0,
   trail = 0,
   play = true,
@@ -25,7 +28,7 @@ export default ({
       seedMatrix();
       dismissReset();
     }
-  }, [reset, matrixWidth, matrixHeight]);
+  }, [reset]);
 
   // update cellMatrix
   useEffect(() => {
@@ -43,7 +46,7 @@ export default ({
         setTick(tick + 1);
         setCellMatrix(newCellMatrix);
       }
-    }, 0);
+    }, 50);
     return () => clearInterval(interval);
   });
 
@@ -110,37 +113,49 @@ export default ({
 
   // refresh canvas
   useEffect(() => {
+    const canvasWidth = canvasRef.current && canvasRef.current.clientWidth;
+    const canvasHeight = canvasRef.current && canvasRef.current.clientHeight;
+    let pixelsPerCell = null;
+    if (canvasWidth > canvasHeight) {
+      pixelsPerCell = scale * canvasWidth / matrixWidth;
+    } else {
+      pixelsPerCell = scale * canvasHeight / matrixHeight;
+    }
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-    draw(
-      context,
-      canvasRef.current && 4 * canvasRef.current.clientWidth,
-      canvasRef.current && 4 * canvasRef.current.clientHeight,
-      matrixWidth,
-      matrixHeight
+    const ctx = canvas.getContext('2d');
+    drawCellMatrix(
+      ctx,
+      canvasWidth,
+      canvasHeight,
+      pixelsPerCell
     );
   }, [cellMatrix, matrixWidth, matrixHeight]);
 
   // draw the cell matrix on the canvas
-  const draw = (context, canvasWidth, canvasHeight, matrixWidth, matrixHeight) => {
-    const scale = {
-      x: canvasWidth / matrixWidth,
-      y: canvasHeight / matrixHeight
-    };
+  const drawCellMatrix = (
+    ctx,
+    canvasWidth,
+    canvasHeight,
+    pixelsPerCell
+  ) => {
     // clear the canvas
     if (trail) {
-      context.globalCompositeOperation = 'destination-in';
-      context.fillStyle = `rgba(256,256,256,${trail})`;
-      context.fillRect(0, 0, canvasWidth, canvasHeight);
+      ctx.globalCompositeOperation = 'destination-in';
+      ctx.fillStyle = `rgba(256,256,256,${trail})`;
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     } else {
-      context.clearRect(0, 0, canvasWidth, canvasHeight);
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     }
     // draw each cell
-    context.globalCompositeOperation = 'source-over';
-    context.fillStyle = 'rgba(211,211,211,1)';
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = 'rgba(211,211,211,1)';
     cellMatrix.forEach((row, rowIndex) => {
       row.forEach((cell, columnIndex) => {
-        cell && context.fillRect(columnIndex * scale.x, rowIndex * scale.y, scale.x, scale.y);
+        cell && ctx.fillRect(
+          pixelsPerCell * columnIndex + originOffsetX,
+          pixelsPerCell * rowIndex + originOffsetY,
+          pixelsPerCell,
+          pixelsPerCell);
       });
     });
   };
@@ -148,8 +163,8 @@ export default ({
   return (
     <Container width={width} height={height}>
       <Canvas
-        width={canvasRef.current && 4 * canvasRef.current.clientWidth}
-        height={canvasRef.current && 4 * canvasRef.current.clientHeight}
+        width={canvasRef.current && canvasRef.current.clientWidth}
+        height={canvasRef.current && canvasRef.current.clientHeight}
         ref={canvasRef}
       />
       <ChildrenContainer>{children}</ChildrenContainer>
@@ -159,8 +174,8 @@ export default ({
 
 const Container = styled.div`{
   position: relative;
-  width: ${({ width }) => width + 'px' || '100%'};
-  height: ${({ height }) => height + 'px' || '100%'};
+  width: ${({ width }) => width ? width + 'px' : '100%'};
+  height: ${({ height }) => height ? height + 'px' : '100%'};
   margin: auto auto;
 }`;
 

@@ -5,6 +5,7 @@ import TickCounter from '../Components/TickCounter/TickCounter';
 import Gameboard from '../Components/Gameboard/Gameboard';
 
 export default () => {
+  const { width, height } = useWindowDimensions();
   const [tick, setTick] = useState(0);
   const [play, setPlay] = useState(true);
   const [reset, setReset] = useState(true);
@@ -25,15 +26,16 @@ export default () => {
     setReset(false);
   };
 
-  const windowDimensions = useWindowDimensions();
-
   return (
-    <>
+    <div style={{ width: '100vw', height: '100vh' }}>
       <Gameboard
-        width={windowDimensions.width}
-        height={windowDimensions.height}
-        matrixWidth={Math.floor(windowDimensions.width / 10)}
-        matrixHeight={Math.floor(windowDimensions.height / 10)}
+        // width={width}
+        // height={height}
+        matrixWidth={Math.floor(width / 10)}
+        matrixHeight={Math.floor(height / 10)}
+        originOffsetY={0}
+        originOffsetX={0}
+        scale={1}
         mutationRate={0.00001}
         trail={0.5}
         play={play}
@@ -45,6 +47,6 @@ export default () => {
         <Header play={play} handlePlay={handlePlay} handlePause={handlePause} handleReset={handleReset} />
         <TickCounter tick={tick} />
       </Gameboard>
-    </>
+    </div>
   );
 };
