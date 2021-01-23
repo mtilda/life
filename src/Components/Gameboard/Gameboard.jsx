@@ -7,8 +7,8 @@ export default ({
   height = null,
   matrixWidth,
   matrixHeight,
-  originOffsetY = 30,
-  originOffsetX = 30,
+  originOffsetX = 0,
+  originOffsetY = 0,
   scale = 1,
   mutationRate = 0,
   trail = 0,
@@ -123,22 +123,41 @@ export default ({
     }
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
+
+    clearCanvas(
+      ctx,
+      canvasWidth,
+      canvasHeight,
+      trail
+    );
+
     drawCellMatrix(
       ctx,
       canvasWidth,
       canvasHeight,
+      matrixWidth,
+      matrixHeight,
+      pixelsPerCell
+    );
+
+    drawAxes(
+      ctx,
+      canvasWidth,
+      canvasHeight,
+      matrixWidth,
+      matrixHeight,
       pixelsPerCell
     );
   }, [cellMatrix, matrixWidth, matrixHeight]);
 
-  // draw the cell matrix on the canvas
-  const drawCellMatrix = (
+  // clear/fade the canvas
+  const clearCanvas = (
     ctx,
     canvasWidth,
     canvasHeight,
-    pixelsPerCell
+    trail
   ) => {
-    // clear the canvas
+    // clear/fade the canvas
     if (trail) {
       ctx.globalCompositeOperation = 'destination-in';
       ctx.fillStyle = `rgba(256,256,256,${trail})`;
@@ -146,18 +165,63 @@ export default ({
     } else {
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     }
+  };
+
+  // draw cell matrix on the canvas
+  const drawCellMatrix = (
+    ctx,
+    canvasWidth,
+    canvasHeight,
+    matrixWidth,
+    matrixHeight,
+    pixelsPerCell
+  ) => {
     // draw each cell
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = 'rgba(211,211,211,1)';
     cellMatrix.forEach((row, rowIndex) => {
       row.forEach((cell, columnIndex) => {
         cell && ctx.fillRect(
-          pixelsPerCell * columnIndex + originOffsetX,
-          pixelsPerCell * rowIndex + originOffsetY,
+          canvasWidth / 2 + pixelsPerCell * (columnIndex - matrixWidth / 2 + originOffsetX),
+          canvasHeight / 2 + pixelsPerCell * (rowIndex - matrixHeight / 2 + originOffsetY),
           pixelsPerCell,
           pixelsPerCell);
       });
     });
+  };
+
+  // draw axes on the canvas
+  const drawAxes = (
+    ctx,
+    canvasWidth,
+    canvasHeight,
+    matrixWidth,
+    matrixHeight,
+    pixelsPerCell
+  ) => {
+    // draw each cell
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.strokeStyle = 'rgba(211,64,64,1)';
+    ctx.beginPath();
+    // x axis
+    ctx.moveTo(
+      canvasWidth / 2 + pixelsPerCell * (originOffsetX - matrixWidth / 2),
+      canvasHeight / 2 + pixelsPerCell * originOffsetY
+    );
+    ctx.lineTo(
+      canvasWidth / 2 + pixelsPerCell * (originOffsetX + matrixWidth / 2),
+      canvasHeight / 2 + pixelsPerCell * originOffsetY
+    );
+    // y axis
+    ctx.moveTo(
+      canvasWidth / 2 + pixelsPerCell * originOffsetX,
+      canvasHeight / 2 + pixelsPerCell * (originOffsetY - matrixHeight / 2)
+    );
+    ctx.lineTo(
+      canvasWidth / 2 + pixelsPerCell * originOffsetX,
+      canvasHeight / 2 + pixelsPerCell * (originOffsetY + matrixHeight / 2)
+    );
+    ctx.stroke();
   };
 
   return (
